@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,14 +8,17 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { saveEntry, getEntryByDate } from "@/utils/storage";
 import { DailyEntry } from "@/types/wellness";
 import { toast } from "sonner";
-import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell } from "lucide-react";
+import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const DailyCheck = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().split('T')[0];
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   
   const [mood, setMood] = useState(5);
   const [energy, setEnergy] = useState(5);
@@ -24,7 +28,8 @@ const DailyCheck = () => {
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
-    const existingEntry = getEntryByDate(today);
+    const dateString = selectedDate.toISOString().split('T')[0];
+    const existingEntry = getEntryByDate(dateString);
     if (existingEntry) {
       setMood(existingEntry.mood);
       setEnergy(existingEntry.energy);
@@ -32,8 +37,16 @@ const DailyCheck = () => {
       setStress(existingEntry.stress);
       setExercise(existingEntry.exercise);
       setNotes(existingEntry.notes);
+    } else {
+      // Reset to defaults when no entry exists for selected date
+      setMood(5);
+      setEnergy(5);
+      setSleep(5);
+      setStress(5);
+      setExercise(false);
+      setNotes("");
     }
-  }, [today]);
+  }, [selectedDate]);
 
   const getMoodIcon = (value: number) => {
     if (value <= 3) return <Frown className="w-6 h-6 text-destructive" />;
@@ -42,9 +55,10 @@ const DailyCheck = () => {
   };
 
   const handleSubmit = () => {
+    const dateString = selectedDate.toISOString().split('T')[0];
     const entry: DailyEntry = {
-      id: today,
-      date: today,
+      id: dateString,
+      date: dateString,
       mood,
       energy,
       sleep,
@@ -74,6 +88,34 @@ const DailyCheck = () => {
         </div>
 
         <Card className="p-8 space-y-8 bg-gradient-card shadow-soft border-border">
+          {/* Date Picker */}
+          <div className="space-y-4">
+            <Label className="text-lg font-semibold">Selecciona la Fecha</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !selectedDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {selectedDate ? format(selectedDate, "PPP") : <span>Selecciona una fecha</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedDate}
+                  onSelect={(date) => date && setSelectedDate(date)}
+                  initialFocus
+                  className={cn("p-3 pointer-events-auto")}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
           {/* Mood */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
