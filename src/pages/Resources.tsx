@@ -125,7 +125,7 @@ const Resources = () => {
               <p className="text-muted-foreground">
                 Si estás experimentando una crisis emocional o pensamientos de autolesión, 
                 por favor busca ayuda profesional inmediatamente. Puedes llamar a la línea 
-                de atención en crisis <strong>024</strong> disponible 24/7.
+                de atención en crisis <strong>*4141</strong> disponible 24/7.
               </p>
               <p className="text-sm text-muted-foreground">
                 Recuerda: pedir ayuda es un acto de valentía, no de debilidad.
