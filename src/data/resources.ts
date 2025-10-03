@@ -6,7 +6,7 @@ export const resources: Resource[] = [
     title: "Meditación Guiada para Principiantes",
     description: "Una introducción suave a la meditación mindfulness, perfecta para reducir el estrés y la ansiedad.",
     category: "meditation",
-    link: "https://positivepsychology.com/meditation-for-beginners/"
+    link: "https://positivepsychology.com/meditation-techniques-beginners/"
   },
   {
     id: "2",
@@ -41,7 +41,7 @@ export const resources: Resource[] = [
     title: "Manejo del Estrés Académico",
     description: "Técnicas específicas para estudiantes para manejar la presión académica.",
     category: "stress",
-    link: "https://positivepsychology.com/stress-management-students/"
+    link: "https://conecta.tec.mx/es/noticias/aguascalientes/salud/encuentra-tu-balance-5-tips-para-manejar-el-estres-academico"
   },
   {
     id: "7",
