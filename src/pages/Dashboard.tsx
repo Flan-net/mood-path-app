@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
+import ClearDataButton from "@/components/ClearDataButton";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getEntriesLastWeek, getEntriesLast30Days, getEntriesLastYear } from "@/utils/storage";
@@ -93,10 +94,15 @@ const Dashboard = () => {
     <Layout>
       <div className="max-w-6xl mx-auto space-y-8 animate-fade-in">
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Tendencias de Bienestar</h1>
+          <div className="flex items-center justify-center gap-4 mb-2">
+            <h1 className="text-4xl font-bold">Tendencias de Bienestar</h1>
+          </div>
           <p className="text-muted-foreground">
             Visualiza tu progreso y descubre patrones en tu bienestar
           </p>
+          <div className="flex justify-center mt-4">
+            <ClearDataButton />
+          </div>
         </div>
 
         {/* Period Selector */}
