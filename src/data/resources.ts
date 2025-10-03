@@ -20,7 +20,7 @@ export const resources: Resource[] = [
     title: "Rutina de Ejercicio para el Bienestar Mental",
     description: "Cómo el ejercicio regular mejora el estado de ánimo y reduce los síntomas de depresión.",
     category: "exercise",
-    link: "https://positivepsychology.com/physical-activity-mental-health/"
+    link: "https://positivepsychology.com/flow-activities/"
   },
   {
     id: "4",
