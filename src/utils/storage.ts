@@ -34,3 +34,23 @@ export const getEntriesLast30Days = (): DailyEntry[] => {
     .filter(e => new Date(e.date) >= thirtyDaysAgo)
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
+
+export const getEntriesLastWeek = (): DailyEntry[] => {
+  const entries = getEntries();
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  
+  return entries
+    .filter(e => new Date(e.date) >= oneWeekAgo)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+};
+
+export const getEntriesLastYear = (): DailyEntry[] => {
+  const entries = getEntries();
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  
+  return entries
+    .filter(e => new Date(e.date) >= oneYearAgo)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+};
