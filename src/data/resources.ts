@@ -48,7 +48,7 @@ export const resources: Resource[] = [
     title: "Líneas de Ayuda 24/7",
     description: "Si necesitas hablar con alguien de inmediato, estas líneas ofrecen apoyo confidencial.",
     category: "emergency",
-    link: "tel:024"
+    link: "tel:*4141"
   },
   {
     id: "8",
