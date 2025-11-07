@@ -7,11 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { saveEntry, getEntryByDate } from "@/utils/storage";
 import { DailyEntry } from "@/types/wellness";
 import { toast } from "sonner";
-import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp } from "lucide-react";
+import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp, ArrowRight } from "lucide-react";
 
 const DailyCheck = () => {
   const navigate = useNavigate();
@@ -154,6 +153,11 @@ const DailyCheck = () => {
     setShowDiagnosis(true);
     
     toast.success("¡Registro guardado exitosamente!");
+    
+    // Scroll al diagnóstico
+    setTimeout(() => {
+      document.getElementById('diagnosis-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   return (
@@ -283,106 +287,108 @@ const DailyCheck = () => {
           </Button>
         </Card>
 
-        {/* Diagnosis Dialog */}
-        <Dialog open={showDiagnosis} onOpenChange={setShowDiagnosis}>
-          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-2xl">
-                <TrendingUp className="w-6 h-6 text-primary" />
+        {/* Diagnosis Section - Inline */}
+        {showDiagnosis && (
+          <div id="diagnosis-section" className="space-y-6 animate-fade-in">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold flex items-center justify-center gap-2">
+                <TrendingUp className="w-8 h-8 text-primary" />
                 Diagnóstico de Bienestar
-              </DialogTitle>
-              <DialogDescription>
+              </h2>
+              <p className="text-muted-foreground">
                 Basado en tu registro de hoy
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-6 mt-4">
-              {/* Overall Assessment */}
-              <Card className="p-4 bg-gradient-card border-border">
+              </p>
+            </div>
+
+            {/* Overall Assessment */}
+            <Card className="p-6 bg-gradient-card border-border shadow-soft">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Evaluación General</h3>
+                  <p className="text-muted-foreground">{diagnosis.overall}</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Individual Metrics */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <Card className="p-4 bg-muted/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Smile className="w-5 h-5 text-primary" />
+                  <h4 className="font-semibold">Estado de Ánimo</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">{diagnosis.mood}</p>
+              </Card>
+
+              <Card className="p-4 bg-muted/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Battery className="w-5 h-5 text-accent" />
+                  <h4 className="font-semibold">Energía</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">{diagnosis.energy}</p>
+              </Card>
+
+              <Card className="p-4 bg-muted/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Moon className="w-5 h-5 text-secondary" />
+                  <h4 className="font-semibold">Sueño</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">{diagnosis.sleep}</p>
+              </Card>
+
+              <Card className="p-4 bg-muted/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain className="w-5 h-5 text-warning" />
+                  <h4 className="font-semibold">Estrés</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">{diagnosis.stress}</p>
+              </Card>
+            </div>
+
+            {/* Recommendations */}
+            {diagnosis.recommendations.length > 0 && (
+              <Card className="p-6 bg-primary/5 border-primary/20">
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Evaluación General</h3>
-                    <p className="text-muted-foreground">{diagnosis.overall}</p>
+                  <AlertCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h4 className="font-semibold mb-3">Recomendaciones Personalizadas</h4>
+                    <ul className="space-y-2">
+                      {diagnosis.recommendations.map((rec, idx) => (
+                        <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                          <span className="text-primary mt-0.5">•</span>
+                          <span>{rec}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </Card>
+            )}
 
-              {/* Individual Metrics */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <Card className="p-4 bg-muted/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Smile className="w-5 h-5 text-primary" />
-                    <h4 className="font-semibold">Estado de Ánimo</h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{diagnosis.mood}</p>
-                </Card>
-
-                <Card className="p-4 bg-muted/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Battery className="w-5 h-5 text-accent" />
-                    <h4 className="font-semibold">Energía</h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{diagnosis.energy}</p>
-                </Card>
-
-                <Card className="p-4 bg-muted/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Moon className="w-5 h-5 text-secondary" />
-                    <h4 className="font-semibold">Sueño</h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{diagnosis.sleep}</p>
-                </Card>
-
-                <Card className="p-4 bg-muted/30">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Brain className="w-5 h-5 text-warning" />
-                    <h4 className="font-semibold">Estrés</h4>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{diagnosis.stress}</p>
-                </Card>
-              </div>
-
-              {/* Recommendations */}
-              {diagnosis.recommendations.length > 0 && (
-                <Card className="p-4 bg-primary/5 border-primary/20">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold mb-3">Recomendaciones Personalizadas</h4>
-                      <ul className="space-y-2">
-                        {diagnosis.recommendations.map((rec, idx) => (
-                          <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                            <span className="text-primary mt-0.5">•</span>
-                            <span>{rec}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </Card>
-              )}
-
-              {/* Action Buttons */}
-              <div className="flex gap-3 pt-4">
-                <Button 
-                  onClick={() => navigate("/dashboard")} 
-                  className="flex-1"
-                  variant="default"
-                >
-                  Ver Tendencias
-                </Button>
-                <Button 
-                  onClick={() => navigate("/resources")} 
-                  className="flex-1"
-                  variant="outline"
-                >
-                  Explorar Recursos
-                </Button>
-              </div>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button 
+                onClick={() => navigate("/dashboard")} 
+                className="flex-1 gap-2"
+                variant="default"
+                size="lg"
+              >
+                Ver Tendencias
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+              <Button 
+                onClick={() => navigate("/resources")} 
+                className="flex-1 gap-2"
+                variant="outline"
+                size="lg"
+              >
+                Explorar Recursos
+                <ArrowRight className="w-4 h-4" />
+              </Button>
             </div>
-          </DialogContent>
-        </Dialog>
+          </div>
+        )}
       </div>
     </Layout>
   );
