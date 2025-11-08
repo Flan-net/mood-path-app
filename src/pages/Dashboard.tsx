@@ -1,16 +1,18 @@
 import { useMemo, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import ClearDataButton from "@/components/ClearDataButton";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getEntriesLastWeek, getEntriesLast30Days, getEntriesLastYear } from "@/utils/storage";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { TrendingUp, Calendar, Activity, ArrowUp, ArrowDown, Minus, Moon } from "lucide-react";
+import { TrendingUp, Calendar, Activity, ArrowUp, ArrowDown, Minus, Moon, AlertTriangle, Info } from "lucide-react";
 import { DailyEntry } from "@/types/wellness";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [period, setPeriod] = useState<"week" | "month" | "year">("month");
-
+  
   const entries = useMemo(() => {
     switch (period) {
       case "week":
@@ -92,7 +94,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto space-y-8 animate-fade-in">
+      <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-10"> {/* Añadido pb-10 para espacio al final */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-4 mb-2">
             <h1 className="text-4xl font-bold">Tendencias de Bienestar</h1>
@@ -113,9 +115,14 @@ const Dashboard = () => {
             <TabsTrigger value="year">Año</TabsTrigger>
           </TabsList>
 
+          {/* =================================================================== */}
+          {/* ================ INICIO DE LA SECCIÓN MODIFICADA ================== */}
+          {/* =================================================================== */}
+
           <TabsContent value={period} className="space-y-8 mt-8">
-            {/* Stats Cards */}
+            {/* Stats Cards (Sin cambios) */}
             <div className="grid md:grid-cols-4 gap-4">
+              {/* Card Ánimo */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -134,6 +141,7 @@ const Dashboard = () => {
                 </div>
               </Card>
 
+              {/* Card Energía */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -152,6 +160,7 @@ const Dashboard = () => {
                 </div>
               </Card>
 
+              {/* Card Sueño */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -170,6 +179,7 @@ const Dashboard = () => {
                 </div>
               </Card>
 
+              {/* Card Estrés */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -189,63 +199,155 @@ const Dashboard = () => {
               </Card>
             </div>
 
-            {/* Chart */}
+            {/* AHORA USAMOS UN WRAPPER DE GRID */}
             {entries.length > 0 ? (
-          <Card className="p-8 bg-gradient-card shadow-soft border-border">
-            <h2 className="text-2xl font-bold mb-6">Evolución de Indicadores</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="hsl(var(--muted-foreground))"
-                  style={{ fontSize: '12px' }}
-                />
-                <YAxis 
-                  domain={[0, 10]} 
-                  stroke="hsl(var(--muted-foreground))"
-                  style={{ fontSize: '12px' }}
-                />
-                <Tooltip 
-                  contentStyle={{
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px',
-                  }}
-                />
-                <Legend />
-                <Line 
-                  type="monotone" 
-                  dataKey="Estado de Ánimo" 
-                  stroke="hsl(var(--primary))" 
-                  strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--primary))' }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="Energía" 
-                  stroke="hsl(var(--accent))" 
-                  strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--accent))' }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="Sueño" 
-                  stroke="hsl(var(--secondary))" 
-                  strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--secondary))' }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="Estrés" 
-                  stroke="hsl(var(--warning))" 
-                  strokeWidth={2}
-                  dot={{ fill: 'hsl(var(--warning))' }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </Card>
+              // Usamos grid-cols-1 por defecto (móvil, apilado)
+              // y lg:grid-cols-12 en pantallas grandes (desktop)
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                {/* Chart (3/4 de ancho en LG) */}
+                <Card className="p-8 bg-gradient-card shadow-soft border-border lg:col-span-9">
+                  <h2 className="text-2xl font-bold mb-6">Evolución de Indicadores</h2>
+                  <ResponsiveContainer width="100%" height={400}>
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis 
+                        dataKey="date" 
+                        stroke="hsl(var(--muted-foreground))"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <YAxis 
+                        domain={[0, 10]} 
+                        stroke="hsl(var(--muted-foreground))"
+                        style={{ fontSize: '12px' }}
+                      />
+                      <Tooltip 
+                        contentStyle={{
+                          backgroundColor: 'hsl(var(--card))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: '8px',
+                        }}
+                      />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="Estado de Ánimo" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth={2}
+                        dot={{ fill: 'hsl(var(--primary))' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="Energía" 
+                        stroke="hsl(var(--accent))" 
+                        strokeWidth={2}
+                        dot={{ fill: 'hsl(var(--accent))' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="Sueño" 
+                        stroke="hsl(var(--secondary))" 
+                        strokeWidth={2}
+                        dot={{ fill: 'hsl(var(--secondary))' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="Estrés" 
+                        stroke="hsl(var(--warning))" 
+                        strokeWidth={2}
+                        dot={{ fill: 'hsl(var(--warning))' }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Insights (1/4 de ancho en LG) */}
+                <Card className="p-8 bg-gradient-calm shadow-soft border-border lg:col-span-3">
+                  <h2 className="text-2xl font-bold mb-4">Perspectivas</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Resumen de {getPeriodLabel()}
+                  </p>
+                  <div className="space-y-4  text-foreground">
+                    <div className="flex items-start gap-3">
+                      <Info className="w-5 h-5 text-primary mt-1 flex-shrink-0"/>
+                      <p>Has registrado <strong className="text-foreground">{entries.length} días</strong> en este período.</p>
+                    </div>
+                    {exerciseCount > 0 && (
+                      <div className="flex items-start gap-3">
+                         <span className="text-primary mt-1">•</span>
+                        <p>Hiciste ejercicio <strong className="text-foreground">{exerciseCount} días</strong>. ¡Excelente trabajo!</p>
+                      </div>
+                    )}
+                    {parseFloat(String(averages.mood)) < 5 && (
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0"/>
+                        <p className="text-foreground"> {/* Quitamos text-warning */}
+                          Tu estado de ánimo promedio está muy bajo. Considera explorar los{" "}
+                          <Link
+                            to="/resources"
+                            state={{ filterCategory: "meditation" }}
+                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                          >
+                            recursos de apoyo
+                          </Link>
+                          .
+                        </p>
+                      </div>
+                    )}
+                    {parseFloat(String(averages.stress)) > 7 && (
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                          Tus niveles de estrés son altos. Te recomendamos practicar{" "}
+                          <Link
+                            to="/resources"
+                            state={{ filterCategory: "stress" }}
+                            className="font-semibold underline hover:text-foreground/80 transition-colors"
+                          >
+                            técnicas de relajación
+                          </Link>
+                          .
+                        </p>
+                      </div>
+                    )}
+                    {parseFloat(String(averages.energy)) < 5 && (
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                          Tus niveles de energía están bajos. Revisa los siguientes{" "}
+                          <Link
+                            to="/resources"
+                            state={{ filterCategory: "exercise" }}
+                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                          >
+                            recursos de apoyo
+                          </Link>
+                          .
+                        </p>
+                      </div>
+                    )}
+                    {parseFloat(String(averages.sleep)) < 5 && (
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                          La calidad de tu sueño necesita atención. Revisa los siguientes{" "}
+                          <Link
+                            to="/resources"
+                            state={{ filterCategory: "sleep" }}
+                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                          >
+                            recursos de apoyo
+                          </Link>
+                          .
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+
+              </div> // Fin del wrapper del grid
             ) : (
+              // "Sin datos" (Sin cambios, se muestra a ancho completo)
               <Card className="p-12 text-center bg-gradient-calm shadow-soft border-border">
                 <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Sin datos todavía</h3>
@@ -255,25 +357,10 @@ const Dashboard = () => {
               </Card>
             )}
 
-            {/* Insights */}
-            {entries.length > 0 && (
-              <Card className="p-8 bg-gradient-calm shadow-soft border-border">
-                <h2 className="text-2xl font-bold mb-4">Perspectivas - {getPeriodLabel()}</h2>
-                <div className="space-y-3 text-muted-foreground">
-                  <p>• Has registrado <strong className="text-foreground">{entries.length} días</strong> en los {getPeriodLabel()}.</p>
-                  {exerciseCount > 0 && (
-                    <p>• Hiciste ejercicio <strong className="text-foreground">{exerciseCount} días</strong>. ¡Excelente trabajo!</p>
-                  )}
-                  {parseFloat(String(averages.mood)) < 5 && (
-                    <p className="text-warning">• Tu estado de ánimo promedio está por debajo de 5. Considera explorar los recursos de apoyo.</p>
-                  )}
-                  {parseFloat(String(averages.stress)) > 7 && (
-                    <p className="text-destructive">• Tus niveles de estrés son altos. Te recomendamos practicar técnicas de relajación.</p>
-                  )}
-                </div>
-              </Card>
-            )}
+            {/* La sección de "Insights" original se elimina porque AHORA ESTÁ DENTRO DEL GRID */}
+
           </TabsContent>
+
         </Tabs>
       </div>
     </Layout>
