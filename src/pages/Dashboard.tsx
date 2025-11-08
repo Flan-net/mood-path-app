@@ -286,7 +286,7 @@ const Dashboard = () => {
                           <Link
                             to="/resources"
                             state={{ filterCategory: "meditation" }}
-                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                            className="font-semibold underline hover:text-foreground/80 transition-colors"
                           >
                             recursos de apoyo
                           </Link>
@@ -318,7 +318,7 @@ const Dashboard = () => {
                           <Link
                             to="/resources"
                             state={{ filterCategory: "exercise" }}
-                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                            className="font-semibold underline hover:text-foreground/80 transition-colors"
                           >
                             recursos de apoyo
                           </Link>
@@ -334,7 +334,7 @@ const Dashboard = () => {
                           <Link
                             to="/resources"
                             state={{ filterCategory: "sleep" }}
-                            className="font-semibold underline hover:text-destructive/80 transition-colors"
+                            className="font-semibold underline hover:text-foreground/80 transition-colors"
                           >
                             recursos de apoyo
                           </Link>
