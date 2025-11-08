@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { saveEntry, getEntryByDate } from "@/utils/storage";
 import { DailyEntry } from "@/types/wellness";
 import { toast } from "sonner";
-import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp, ArrowRight } from "lucide-react";
+import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp, ArrowRight, Edit3 } from "lucide-react";
 
 const DailyCheck = () => {
   const navigate = useNavigate();
@@ -154,195 +154,270 @@ const DailyCheck = () => {
     
     toast.success("¡Registro guardado exitosamente!");
     
-    // Scroll al diagnóstico
-    setTimeout(() => {
-      document.getElementById('diagnosis-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
   };
 
-  return (
+return (
     <Layout>
       <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
+        
+        {/* --- TÍTULO DINÁMICO --- */}
+        {/* El título ahora cambia según el estado */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold">Registro Diario</h1>
-          <p className="text-muted-foreground">
-            ¿Cómo te sientes hoy? Tómate un momento para reflexionar.
-          </p>
-        </div>
-
-        <Card className="p-8 space-y-8 bg-gradient-card shadow-soft border-border">
-          {/* Mood */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-lg font-semibold flex items-center gap-2">
-                {getMoodIcon(mood)}
-                Estado de Ánimo
-              </Label>
-              <span className="text-2xl font-bold text-primary">{mood}/10</span>
-            </div>
-            <Slider
-              value={[mood]}
-              onValueChange={(v) => setMood(v[0])}
-              max={10}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-            <p className="text-sm text-muted-foreground">
-              1 = Muy bajo, 10 = Excelente
-            </p>
-          </div>
-
-          {/* Energy */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-lg font-semibold flex items-center gap-2">
-                <Battery className="w-6 h-6 text-accent" />
-                Nivel de Energía
-              </Label>
-              <span className="text-2xl font-bold text-accent">{energy}/10</span>
-            </div>
-            <Slider
-              value={[energy]}
-              onValueChange={(v) => setEnergy(v[0])}
-              max={10}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-          </div>
-
-          {/* Sleep */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-lg font-semibold flex items-center gap-2">
-                <Moon className="w-6 h-6 text-secondary" />
-                Calidad del Sueño
-              </Label>
-              <span className="text-2xl font-bold text-secondary">{sleep}/10</span>
-            </div>
-            <Slider
-              value={[sleep]}
-              onValueChange={(v) => setSleep(v[0])}
-              max={10}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-          </div>
-
-          {/* Stress */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-lg font-semibold flex items-center gap-2">
-                <Brain className="w-6 h-6 text-warning" />
-                Nivel de Estrés
-              </Label>
-              <span className="text-2xl font-bold text-warning">{stress}/10</span>
-            </div>
-            <Slider
-              value={[stress]}
-              onValueChange={(v) => setStress(v[0])}
-              max={10}
-              min={1}
-              step={1}
-              className="w-full"
-            />
-            <p className="text-sm text-muted-foreground">
-              1 = Sin estrés, 10 = Muy estresado
-            </p>
-          </div>
-
-          {/* Exercise */}
-          <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
-            <Label className="text-lg font-semibold flex items-center gap-2">
-              <Dumbbell className="w-6 h-6 text-primary" />
-              ¿Hiciste ejercicio hoy?
-            </Label>
-            <Switch
-              checked={exercise}
-              onCheckedChange={setExercise}
-            />
-          </div>
-
-          {/* Notes */}
-          <div className="space-y-4">
-            <Label className="text-lg font-semibold">
-              Notas Personales (Opcional)
-            </Label>
-            <Textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="¿Algo en particular que quieras recordar sobre hoy?"
-              className="min-h-[120px] resize-none"
-            />
-          </div>
-
-          <Button 
-            onClick={handleSubmit} 
-            className="w-full text-lg py-6 shadow-glow"
-            size="lg"
-          >
-            Guardar Registro
-          </Button>
-        </Card>
-
-        {/* Diagnosis Section - Inline */}
-        {showDiagnosis && (
-          <div id="diagnosis-section" className="space-y-6 animate-fade-in">
-            <div className="text-center space-y-2">
-              <h2 className="text-3xl font-bold flex items-center justify-center gap-2">
+          {!showDiagnosis ? (
+            <>
+              <h1 className="text-4xl font-bold">Registro Diario</h1>
+              <p className="text-muted-foreground">
+                ¿Cómo te sientes hoy? Tómate un momento para reflexionar.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-4xl font-bold flex items-center justify-center gap-2">
                 <TrendingUp className="w-8 h-8 text-primary" />
                 Diagnóstico de Bienestar
-              </h2>
+              </h1>
               <p className="text-muted-foreground">
                 Basado en tu registro de hoy
               </p>
+            </>
+          )}
+        </div>
+
+        {/* --- INTERCAMBIO DE VISTA PRINCIPAL --- */}
+
+        {!showDiagnosis ? (
+          
+          // --- VISTA DE FORMULARIO ---
+          <Card className="p-8 space-y-8 bg-gradient-card shadow-soft border-border animate-fade-in">
+            {/* ... (Mood, Energy, Sleep, Stress, Exercise, Notes se mantienen igual) ... */}
+            
+            {/* Mood */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-lg font-semibold flex items-center gap-2">
+                  {getMoodIcon(mood)}
+                  Estado de Ánimo
+                </Label>
+                <span className="text-2xl font-bold text-primary">{mood}/10</span>
+              </div>
+              <Slider
+                value={[mood]}
+                onValueChange={(v) => setMood(v[0])}
+                max={10}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+              <p className="text-sm text-muted-foreground">
+                1 = Muy bajo, 10 = Excelente
+              </p>
             </div>
+
+            {/* Energy */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-lg font-semibold flex items-center gap-2">
+                  <Battery className="w-6 h-6 text-accent" />
+                  Nivel de Energía
+                </Label>
+                <span className="text-2xl font-bold text-accent">{energy}/10</span>
+              </div>
+              <Slider
+                value={[energy]}
+                onValueChange={(v) => setEnergy(v[0])}
+                max={10}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+              <p className="text-sm text-muted-foreground">
+                1 = Muy bajo, 10 = Muy alto
+              </p>
+            </div>
+
+            {/* Sleep */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-lg font-semibold flex items-center gap-2">
+                  <Moon className="w-6 h-6 text-secondary" />
+                  Calidad del Sueño
+                </Label>
+                <span className="text-2xl font-bold text-secondary">{sleep}/10</span>
+              </div>
+              <Slider
+                value={[sleep]}
+                onValueChange={(v) => setSleep(v[0])}
+                max={10}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+              <p className="text-sm text-muted-foreground">
+                1 = Nada de descanso, 10 = Muy descansado
+              </p>
+            </div>
+
+            {/* Stress */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-lg font-semibold flex items-center gap-2">
+                  <Brain className="w-6 h-6 text-warning" />
+                  Nivel de Estrés
+                </Label>
+                <span className="text-2xl font-bold text-warning">{stress}/10</span>
+              </div>
+              <Slider
+                value={[stress]}
+                onValueChange={(v) => setStress(v[0])}
+                max={10}
+                min={1}
+                step={1}
+                className="w-full"
+              />
+              <p className="text-sm text-muted-foreground">
+                1 = Sin estrés, 10 = Estrés extremo
+              </p>
+            </div>
+
+            {/* Exercise */}
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
+              <Label className="text-lg font-semibold flex items-center gap-2">
+                <Dumbbell className="w-6 h-6 text-primary" />
+                ¿Hiciste ejercicio hoy?
+              </Label>
+              <Switch
+                checked={exercise}
+                onCheckedChange={setExercise}
+              />
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-4">
+              <Label className="text-lg font-semibold">
+                Notas Personales (Opcional)
+              </Label>
+              <Textarea
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="¿Algo en particular que quieras recordar sobre hoy?"
+                className="min-h-[120px] resize-none"
+              />
+            </div>
+
+
+            <Button 
+              onClick={handleSubmit} 
+              className="w-full text-lg py-6 shadow-glow"
+              size="lg"
+            >
+              Guardar Registro
+            </Button>
+          </Card>
+
+        ) : (
+          
+          // --- VISTA DE DIAGNÓSTICO ---
+          
+          <div id="diagnosis-section" className="space-y-6 animate-fade-in">
+
 
             {/* Overall Assessment */}
             <Card className="p-6 bg-gradient-card border-border shadow-soft">
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Evaluación General</h3>
-                  <p className="text-muted-foreground">{diagnosis.overall}</p>
+              <div className="grid md:grid-cols-4 gap-4 items-center">
+
+                <div className="flex items-start gap-3 md:col-span-3">
+                  <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Evaluación General</h3>
+                    <p className="text-muted-foreground">{diagnosis.overall}</p>
+                  </div>
                 </div>
+
+                <Button 
+                onClick={() => setShowDiagnosis(false)} 
+                className="w-full gap-2"
+                variant="outline" // Variante "outline" para que sea secundaria
+                size="lg"
+              >
+                <Edit3 className="w-4 h-4" />
+                Rehacer mi registro
+              </Button>
               </div>
             </Card>
-
-            {/* Individual Metrics */}
+                          
+            {/* --- Individual Metrics (MODIFICADO) --- */}
             <div className="grid md:grid-cols-2 gap-4">
+              
+              {/* Card de Ánimo */}
               <Card className="p-4 bg-muted/30">
-                <div className="flex items-center gap-2 mb-2">
-                  <Smile className="w-5 h-5 text-primary" />
-                  <h4 className="font-semibold">Estado de Ánimo</h4>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <Smile className="w-5 h-5 text-primary" />
+                    <h4 className="font-semibold">Estado de Ánimo</h4>
+                  </div>
+                  {/* Puntaje con color condicional */}
+                  <span className={`font-bold text-lg ${mood < 5 ? 'text-destructive' : 'text-primary'}`}>
+                    {mood}/10
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">{diagnosis.mood}</p>
+                {/* Texto del diagnóstico con color condicional */}
+                <p className={`text-sm ${mood < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                  {diagnosis.mood}
+                </p>
               </Card>
 
+              {/* Card de Energía */}
               <Card className="p-4 bg-muted/30">
-                <div className="flex items-center gap-2 mb-2">
-                  <Battery className="w-5 h-5 text-accent" />
-                  <h4 className="font-semibold">Energía</h4>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <Battery className="w-5 h-5 text-accent" />
+                    <h4 className="font-semibold">Energía</h4>
+                  </div>
+                  {/* Puntaje con color condicional */}
+                  <span className={`font-bold text-lg ${energy < 5 ? 'text-destructive' : 'text-accent'}`}>
+                    {energy}/10
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">{diagnosis.energy}</p>
+                {/* Texto del diagnóstico con color condicional */}
+                <p className={`text-sm ${energy < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                  {diagnosis.energy}
+                </p>
               </Card>
 
+              {/* Card de Sueño */}
               <Card className="p-4 bg-muted/30">
-                <div className="flex items-center gap-2 mb-2">
-                  <Moon className="w-5 h-5 text-secondary" />
-                  <h4 className="font-semibold">Sueño</h4>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <Moon className="w-5 h-5 text-secondary" />
+                    <h4 className="font-semibold">Sueño</h4>
+                  </div>
+                  {/* Puntaje con color condicional */}
+                  <span className={`font-bold text-lg ${sleep < 5 ? 'text-destructive' : 'text-secondary'}`}>
+                    {sleep}/10
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">{diagnosis.sleep}</p>
+                {/* Texto del diagnóstico con color condicional */}
+                <p className={`text-sm ${sleep < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                  {diagnosis.sleep}
+                </p>
               </Card>
 
+              {/* Card de Estrés */}
               <Card className="p-4 bg-muted/30">
-                <div className="flex items-center gap-2 mb-2">
-                  <Brain className="w-5 h-5 text-warning" />
-                  <h4 className="font-semibold">Estrés</h4>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2">
+                    <Brain className="w-5 h-5 text-warning" />
+                    <h4 className="font-semibold">Estrés</h4>
+                  </div>
+                  {/* Puntaje con color condicional (lógica invertida) */}
+                  <span className={`font-bold text-lg ${stress > 6 ? 'text-destructive' : 'text-warning'}`}>
+                    {stress}/10
+                  </span>
                 </div>
-                <p className="text-sm text-muted-foreground">{diagnosis.stress}</p>
+                {/* Texto del diagnóstico con color condicional (lógica invertida) */}
+                <p className={`text-sm ${stress > 6 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                  {diagnosis.stress}
+                </p>
               </Card>
             </div>
 
@@ -366,27 +441,32 @@ const DailyCheck = () => {
               </Card>
             )}
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button 
-                onClick={() => navigate("/dashboard")} 
-                className="flex-1 gap-2"
-                variant="default"
-                size="lg"
-              >
-                Ver Tendencias
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-              <Button 
-                onClick={() => navigate("/resources")} 
-                className="flex-1 gap-2"
-                variant="outline"
-                size="lg"
-              >
-                Explorar Recursos
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+            {/* --- BOTONES DE ACCIÓN --- */}
+            <div className="flex flex-col gap-3">
+
+              {/* Botones de navegación existentes */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button 
+                  onClick={() => navigate("/dashboard")} 
+                  className="flex-1 gap-2"
+                  variant="default"
+                  size="lg"
+                >
+                  Ver Tendencias
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+                <Button 
+                  onClick={() => navigate("/resources")} 
+                  className="flex-1 gap-2"
+                  variant="outline"
+                  size="lg"
+                >
+                  Explorar Recursos
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
+            
           </div>
         )}
       </div>
