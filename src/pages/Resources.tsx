@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,8 +32,10 @@ const categoryColors = {
 };
 
 const Resources = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+  const location = useLocation();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    location.state?.filterCategory || null
+  );
   const filteredResources = selectedCategory
     ? resources.filter(r => r.category === selectedCategory)
     : resources;
