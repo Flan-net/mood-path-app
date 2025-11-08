@@ -274,7 +274,7 @@ const Dashboard = () => {
                     </div>
                     {exerciseCount > 0 && (
                       <div className="flex items-start gap-3">
-                         <span className="text-primary mt-1">•</span>
+                        <Info className="w-5 h-5 text-primary mt-1 flex-shrink-0"/>
                         <p>Hiciste ejercicio <strong className="text-foreground">{exerciseCount} días</strong>. ¡Excelente trabajo!</p>
                       </div>
                     )}
