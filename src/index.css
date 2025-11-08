@@ -118,4 +118,15 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    overflow-y: scroll;
+  }
+  
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
