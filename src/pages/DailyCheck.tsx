@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { saveEntry, getEntryByDate } from "@/utils/storage";
 import { DailyEntry } from "@/types/wellness";
 import { toast } from "sonner";
-import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp, ArrowRight, Edit3 } from "lucide-react";
+import { Smile, Frown, Meh, Battery, Moon, Brain, Dumbbell, AlertCircle, CheckCircle, TrendingUp, ArrowRight, Edit3, AlertTriangle } from "lucide-react";
 
 const DailyCheck = () => {
   const navigate = useNavigate();
@@ -23,13 +23,14 @@ const DailyCheck = () => {
   const [exercise, setExercise] = useState(false);
   const [notes, setNotes] = useState("");
   const [showDiagnosis, setShowDiagnosis] = useState(false);
-  const [diagnosis, setDiagnosis] = useState({
+const [diagnosis, setDiagnosis] = useState({
     overall: "",
     mood: "",
     energy: "",
     sleep: "",
     stress: "",
-    recommendations: [] as string[]
+    recommendations: [] as string[],
+    isCritical: false
   });
 
   useEffect(() => {
@@ -53,6 +54,7 @@ const DailyCheck = () => {
   const generateDiagnosis = () => {
     const recommendations: string[] = [];
     let overall = "";
+    let lowMetricsCount = 0;
     
     // Análisis del estado de ánimo
     let moodAnalysis = "";
@@ -65,6 +67,7 @@ const DailyCheck = () => {
       moodAnalysis = "Tu estado de ánimo está bajo. Es importante cuidar tu salud mental.";
       recommendations.push("Considera hablar con alguien de confianza o un profesional");
       recommendations.push("Practica técnicas de gratitud diaria");
+      lowMetricsCount++;
     }
     
     // Análisis de energía
@@ -78,6 +81,7 @@ const DailyCheck = () => {
       energyAnalysis = "Tus niveles de energía están bajos.";
       recommendations.push("Revisa tus hábitos de alimentación y descanso");
       recommendations.push("Considera una caminata corta al aire libre");
+      lowMetricsCount++;
     }
     
     // Análisis del sueño
@@ -91,6 +95,7 @@ const DailyCheck = () => {
       sleepAnalysis = "La calidad de tu sueño necesita atención.";
       recommendations.push("Evita pantallas 1 hora antes de dormir");
       recommendations.push("Crea un ambiente tranquilo para descansar");
+      lowMetricsCount++;
     }
     
     // Análisis del estrés
@@ -104,6 +109,7 @@ const DailyCheck = () => {
       stressAnalysis = "Tus niveles de estrés son altos.";
       recommendations.push("Considera practicar meditación o yoga");
       recommendations.push("Identifica y reduce fuentes de estrés cuando sea posible");
+      lowMetricsCount++;
     }
     
     // Análisis del ejercicio
@@ -122,6 +128,7 @@ const DailyCheck = () => {
     } else {
       overall += "Tu bienestar necesita atención. Es importante que te cuides y busques apoyo.";
     }
+    const isCritical = lowMetricsCount >= 3;
     
     return {
       overall,
@@ -129,7 +136,8 @@ const DailyCheck = () => {
       energy: energyAnalysis,
       sleep: sleepAnalysis,
       stress: stressAnalysis,
-      recommendations: recommendations.slice(0, 4) // Máximo 4 recomendaciones
+      recommendations: recommendations.slice(0, 4),
+      isCritical: isCritical,
     };
   };
 
@@ -421,21 +429,41 @@ return (
               </Card>
             </div>
 
-            {/* Recommendations */}
-            {diagnosis.recommendations.length > 0 && (
-              <Card className="p-6 bg-primary/5 border-primary/20">
+            {/* Recommendations or Critical Warning */}
+            {(diagnosis.recommendations.length > 0 || diagnosis.isCritical) && (
+              <Card 
+                className={`p-6 ${
+                  diagnosis.isCritical 
+                    ? 'bg-destructive/10 border-destructive/30' 
+                    : 'bg-primary/5 border-primary/20'
+                }`}
+              >
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                  {diagnosis.isCritical ? (
+                    <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+                  )}
+
                   <div className="flex-1">
-                    <h4 className="font-semibold mb-3">Recomendaciones Personalizadas</h4>
-                    <ul className="space-y-2">
-                      {diagnosis.recommendations.map((rec, idx) => (
-                        <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <span className="text-primary mt-0.5">•</span>
-                          <span>{rec}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <h4 className={`font-semibold mb-3 ${diagnosis.isCritical ? 'text-destructive' : ''}`}>
+                      {diagnosis.isCritical ? 'Advertencia' : 'Recomendaciones Personalizadas'}
+                    </h4>
+                    
+                    {diagnosis.isCritical ? (
+                      <p className="text-sm font-bold text-destructive">
+                        Posees un estado crítico. En caso de necesitarlo, puedes llamar a la línea de emergencia 600 360 7777 (Seleccionar la opción 4) donde profesionales de salud mental podrán ayudarte.
+                      </p>
+                    ) : (
+                      <ul className="space-y-2">
+                        {diagnosis.recommendations.map((rec, idx) => (
+                          <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                            <span className="text-primary mt-0.5">•</span>
+                            <span>{rec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </Card>
