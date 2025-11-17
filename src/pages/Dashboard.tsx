@@ -62,12 +62,10 @@ const Dashboard = () => {
     const numValue = parseFloat(String(value));
     
     if (metric === "stress") {
-      // Para estrés, menos es mejor
       if (numValue <= 3) return { icon: ArrowDown, color: "text-success", bg: "bg-success/10", label: "Bajo" };
       if (numValue <= 6) return { icon: Minus, color: "text-warning", bg: "bg-warning/10", label: "Moderado" };
       return { icon: ArrowUp, color: "text-destructive", bg: "bg-destructive/10", label: "Alto" };
     } else {
-      // Para mood, energy, sleep: más es mejor
       if (numValue >= 7) return { icon: ArrowUp, color: "text-success", bg: "bg-success/10", label: "Excelente" };
       if (numValue >= 5) return { icon: Minus, color: "text-warning", bg: "bg-warning/10", label: "Moderado" };
       return { icon: ArrowDown, color: "text-destructive", bg: "bg-destructive/10", label: "Bajo" };
@@ -94,7 +92,7 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-10"> {/* Añadido pb-10 para espacio al final */}
+      <div className="max-w-6xl mx-auto space-y-8 animate-fade-in pb-10"> 
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-4 mb-2">
             <h1 className="text-4xl font-bold">Tendencias de Bienestar</h1>
@@ -107,7 +105,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Period Selector */}
         <Tabs value={period} onValueChange={(v) => setPeriod(v as "week" | "month" | "year")} className="w-full">
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-3">
             <TabsTrigger value="week">Semana</TabsTrigger>
@@ -115,14 +112,8 @@ const Dashboard = () => {
             <TabsTrigger value="year">Año</TabsTrigger>
           </TabsList>
 
-          {/* =================================================================== */}
-          {/* ================ INICIO DE LA SECCIÓN MODIFICADA ================== */}
-          {/* =================================================================== */}
-
           <TabsContent value={period} className="space-y-8 mt-8">
-            {/* Stats Cards (Sin cambios) */}
             <div className="grid md:grid-cols-4 gap-4">
-              {/* Card Ánimo */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -141,7 +132,6 @@ const Dashboard = () => {
                 </div>
               </Card>
 
-              {/* Card Energía */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -160,7 +150,6 @@ const Dashboard = () => {
                 </div>
               </Card>
 
-              {/* Card Sueño */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -179,7 +168,6 @@ const Dashboard = () => {
                 </div>
               </Card>
 
-              {/* Card Estrés */}
               <Card className="p-6 bg-gradient-card shadow-soft border-border">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -199,13 +187,8 @@ const Dashboard = () => {
               </Card>
             </div>
 
-            {/* AHORA USAMOS UN WRAPPER DE GRID */}
             {entries.length > 0 ? (
-              // Usamos grid-cols-1 por defecto (móvil, apilado)
-              // y lg:grid-cols-12 en pantallas grandes (desktop)
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                {/* Chart (3/4 de ancho en LG) */}
                 <Card className="p-8 bg-gradient-card shadow-soft border-border lg:col-span-9">
                   <h2 className="text-2xl font-bold mb-6">Evolución de Indicadores</h2>
                   <ResponsiveContainer width="100%" height={400}>
@@ -261,7 +244,6 @@ const Dashboard = () => {
                   </ResponsiveContainer>
                 </Card>
 
-                {/* Insights (1/4 de ancho en LG) */}
                 <Card className="p-8 bg-gradient-calm shadow-soft border-border lg:col-span-3">
                   <h2 className="text-2xl font-bold mb-4">Perspectivas</h2>
                   <p className="text-sm text-muted-foreground mb-4">
@@ -281,7 +263,7 @@ const Dashboard = () => {
                     {parseFloat(String(averages.mood)) < 5 && (
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0"/>
-                        <p className="text-foreground"> {/* Quitamos text-warning */}
+                        <p className="text-foreground"> 
                           Tu estado de ánimo promedio está muy bajo. Considera explorar los{" "}
                           <Link
                             to="/resources"
@@ -297,7 +279,7 @@ const Dashboard = () => {
                     {parseFloat(String(averages.stress)) > 7 && (
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
-                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                        <p className="text-foreground"> 
                           Tus niveles de estrés son altos. Te recomendamos practicar{" "}
                           <Link
                             to="/resources"
@@ -313,7 +295,7 @@ const Dashboard = () => {
                     {parseFloat(String(averages.energy)) < 5 && (
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
-                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                        <p className="text-foreground"> 
                           Tus niveles de energía están bajos. Revisa los siguientes{" "}
                           <Link
                             to="/resources"
@@ -329,7 +311,7 @@ const Dashboard = () => {
                     {parseFloat(String(averages.sleep)) < 5 && (
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 text-destructive mt-1 flex-shrink-0" />
-                        <p className="text-foreground"> {/* Mantenemos el color de alerta */}
+                        <p className="text-foreground"> 
                           La calidad de tu sueño necesita atención. Revisa los siguientes{" "}
                           <Link
                             to="/resources"
@@ -345,9 +327,9 @@ const Dashboard = () => {
                   </div>
                 </Card>
 
-              </div> // Fin del wrapper del grid
+              </div> 
             ) : (
-              // "Sin datos" (Sin cambios, se muestra a ancho completo)
+
               <Card className="p-12 text-center bg-gradient-calm shadow-soft border-border">
                 <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Sin datos todavía</h3>
@@ -356,8 +338,6 @@ const Dashboard = () => {
                 </p>
               </Card>
             )}
-
-            {/* La sección de "Insights" original se elimina porque AHORA ESTÁ DENTRO DEL GRID */}
 
           </TabsContent>
 

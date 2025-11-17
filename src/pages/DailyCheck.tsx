@@ -55,8 +55,7 @@ const [diagnosis, setDiagnosis] = useState({
     const recommendations: string[] = [];
     let overall = "";
     let lowMetricsCount = 0;
-    
-    // Análisis del estado de ánimo
+
     let moodAnalysis = "";
     if (mood >= 7) {
       moodAnalysis = "Tu estado de ánimo es excelente. ¡Sigue así!";
@@ -69,8 +68,7 @@ const [diagnosis, setDiagnosis] = useState({
       recommendations.push("Practica técnicas de gratitud diaria");
       lowMetricsCount++;
     }
-    
-    // Análisis de energía
+
     let energyAnalysis = "";
     if (energy >= 7) {
       energyAnalysis = "Tienes excelentes niveles de energía.";
@@ -83,8 +81,7 @@ const [diagnosis, setDiagnosis] = useState({
       recommendations.push("Considera una caminata corta al aire libre");
       lowMetricsCount++;
     }
-    
-    // Análisis del sueño
+
     let sleepAnalysis = "";
     if (sleep >= 7) {
       sleepAnalysis = "Tu calidad de sueño es óptima.";
@@ -97,8 +94,7 @@ const [diagnosis, setDiagnosis] = useState({
       recommendations.push("Crea un ambiente tranquilo para descansar");
       lowMetricsCount++;
     }
-    
-    // Análisis del estrés
+
     let stressAnalysis = "";
     if (stress <= 3) {
       stressAnalysis = "Tus niveles de estrés son bajos. ¡Excelente!";
@@ -111,15 +107,13 @@ const [diagnosis, setDiagnosis] = useState({
       recommendations.push("Identifica y reduce fuentes de estrés cuando sea posible");
       lowMetricsCount++;
     }
-    
-    // Análisis del ejercicio
+
     if (exercise) {
       overall = "¡Excelente trabajo al hacer ejercicio hoy! ";
     } else {
       recommendations.push("Intenta incluir al menos 20 minutos de actividad física");
     }
-    
-    // Evaluación general
+
     const avgScore = (mood + energy + sleep + (10 - stress)) / 4;
     if (avgScore >= 7) {
       overall += "Tu bienestar general es muy bueno. Continúa con estos hábitos saludables.";
@@ -154,8 +148,7 @@ const [diagnosis, setDiagnosis] = useState({
     };
 
     saveEntry(entry);
-    
-    // Generar y mostrar diagnóstico
+
     const newDiagnosis = generateDiagnosis();
     setDiagnosis(newDiagnosis);
     setShowDiagnosis(true);
@@ -167,9 +160,6 @@ const [diagnosis, setDiagnosis] = useState({
 return (
     <Layout>
       <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
-        
-        {/* --- TÍTULO DINÁMICO --- */}
-        {/* El título ahora cambia según el estado */}
         <div className="text-center space-y-2">
           {!showDiagnosis ? (
             <>
@@ -191,15 +181,8 @@ return (
           )}
         </div>
 
-        {/* --- INTERCAMBIO DE VISTA PRINCIPAL --- */}
-
         {!showDiagnosis ? (
-          
-          // --- VISTA DE FORMULARIO ---
           <Card className="p-8 space-y-8 bg-gradient-card shadow-soft border-border animate-fade-in">
-            {/* ... (Mood, Energy, Sleep, Stress, Exercise, Notes se mantienen igual) ... */}
-            
-            {/* Mood */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="text-lg font-semibold flex items-center gap-2">
@@ -221,7 +204,6 @@ return (
               </p>
             </div>
 
-            {/* Energy */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="text-lg font-semibold flex items-center gap-2">
@@ -243,7 +225,6 @@ return (
               </p>
             </div>
 
-            {/* Sleep */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="text-lg font-semibold flex items-center gap-2">
@@ -265,7 +246,6 @@ return (
               </p>
             </div>
 
-            {/* Stress */}
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <Label className="text-lg font-semibold flex items-center gap-2">
@@ -287,7 +267,6 @@ return (
               </p>
             </div>
 
-            {/* Exercise */}
             <div className="flex items-center justify-between p-4 bg-muted/50 rounded-xl">
               <Label className="text-lg font-semibold flex items-center gap-2">
                 <Dumbbell className="w-6 h-6 text-primary" />
@@ -299,7 +278,6 @@ return (
               />
             </div>
 
-            {/* Notes */}
             <div className="space-y-4">
               <Label className="text-lg font-semibold">
                 Notas Personales (Opcional)
@@ -324,12 +302,7 @@ return (
 
         ) : (
           
-          // --- VISTA DE DIAGNÓSTICO ---
-          
           <div id="diagnosis-section" className="space-y-6 animate-fade-in">
-
-
-            {/* Overall Assessment */}
             <Card className="p-6 bg-gradient-card border-border shadow-soft">
               <div className="grid md:grid-cols-4 gap-4 items-center">
 
@@ -344,7 +317,7 @@ return (
                 <Button 
                 onClick={() => setShowDiagnosis(false)} 
                 className="w-full gap-2"
-                variant="outline" // Variante "outline" para que sea secundaria
+                variant="outline" 
                 size="lg"
               >
                 <Edit3 className="w-4 h-4" />
@@ -352,84 +325,77 @@ return (
               </Button>
               </div>
             </Card>
-                          
-            {/* --- Individual Metrics (MODIFICADO) --- */}
+
             <div className="grid md:grid-cols-2 gap-4">
-              
-              {/* Card de Ánimo */}
               <Card className="p-4 bg-muted/30">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Smile className="w-5 h-5 text-primary" />
                     <h4 className="font-semibold">Estado de Ánimo</h4>
                   </div>
-                  {/* Puntaje con color condicional */}
+
                   <span className={`font-bold text-lg ${mood < 5 ? 'text-destructive' : 'text-primary'}`}>
                     {mood}/10
                   </span>
                 </div>
-                {/* Texto del diagnóstico con color condicional */}
+
                 <p className={`text-sm ${mood < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {diagnosis.mood}
                 </p>
               </Card>
 
-              {/* Card de Energía */}
               <Card className="p-4 bg-muted/30">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Battery className="w-5 h-5 text-accent" />
                     <h4 className="font-semibold">Energía</h4>
                   </div>
-                  {/* Puntaje con color condicional */}
+
                   <span className={`font-bold text-lg ${energy < 5 ? 'text-destructive' : 'text-accent'}`}>
                     {energy}/10
                   </span>
                 </div>
-                {/* Texto del diagnóstico con color condicional */}
+
                 <p className={`text-sm ${energy < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {diagnosis.energy}
                 </p>
               </Card>
 
-              {/* Card de Sueño */}
               <Card className="p-4 bg-muted/30">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Moon className="w-5 h-5 text-secondary" />
                     <h4 className="font-semibold">Sueño</h4>
                   </div>
-                  {/* Puntaje con color condicional */}
+
                   <span className={`font-bold text-lg ${sleep < 5 ? 'text-destructive' : 'text-secondary'}`}>
                     {sleep}/10
                   </span>
                 </div>
-                {/* Texto del diagnóstico con color condicional */}
+
                 <p className={`text-sm ${sleep < 5 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {diagnosis.sleep}
                 </p>
               </Card>
 
-              {/* Card de Estrés */}
               <Card className="p-4 bg-muted/30">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
                     <Brain className="w-5 h-5 text-warning" />
                     <h4 className="font-semibold">Estrés</h4>
                   </div>
-                  {/* Puntaje con color condicional (lógica invertida) */}
+
                   <span className={`font-bold text-lg ${stress > 6 ? 'text-destructive' : 'text-warning'}`}>
                     {stress}/10
                   </span>
                 </div>
-                {/* Texto del diagnóstico con color condicional (lógica invertida) */}
+
                 <p className={`text-sm ${stress > 6 ? 'text-destructive' : 'text-muted-foreground'}`}>
                   {diagnosis.stress}
                 </p>
               </Card>
             </div>
 
-            {/* Recommendations or Critical Warning */}
             {(diagnosis.recommendations.length > 0 || diagnosis.isCritical) && (
               <Card 
                 className={`p-6 ${
@@ -451,9 +417,22 @@ return (
                     </h4>
                     
                     {diagnosis.isCritical ? (
-                      <p className="text-sm font-bold text-destructive">
-                        Posees un estado crítico. En caso de necesitarlo, puedes llamar a la línea de emergencia 600 360 7777 (Seleccionar la opción 4) donde profesionales de salud mental podrán ayudarte.
-                      </p>
+                      <div className="flex flex-col gap-3">
+                        <p className="text-sm font-bold text-destructive">
+                          Posees un estado crítico, necesitas ayuda. Te recomiendo acceder a Ayuda Urgente.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Button 
+                              onClick={() => navigate("/urgent-help")} 
+                              className="flex-1 gap-2"
+                              variant="destructive" // Usa la variante destructiva/roja para enfatizar la urgencia
+                              size="lg"
+                          >
+                              Acceder a Ayuda Urgente
+                              <ArrowRight className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
                     ) : (
                       <ul className="space-y-2">
                         {diagnosis.recommendations.map((rec, idx) => (
@@ -469,10 +448,7 @@ return (
               </Card>
             )}
 
-            {/* --- BOTONES DE ACCIÓN --- */}
             <div className="flex flex-col gap-3">
-
-              {/* Botones de navegación existentes */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button 
                   onClick={() => navigate("/dashboard")} 

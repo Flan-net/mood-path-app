@@ -68,7 +68,6 @@ const Index = () => {
             Llevar un diario de bienestar te ayuda a conectar contigo mismo y a cultivar una vida más plena.
           </p>
           <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 text-left">
-            {/* Beneficio 1 */}
             <div className="flex items-start space-x-4">
               <div className="w-14 h-14 bg-blue-500/10 rounded-lg flex-shrink-0 flex items-center justify-center">
                 <BrainCircuit className="w-7 h-7 text-blue-500" />
@@ -78,7 +77,6 @@ const Index = () => {
                 <p className="text-muted-foreground">Identifica qué actividades, pensamientos y hábitos influyen directamente en tu estado de ánimo.</p>
               </div>
             </div>
-            {/* Beneficio 2 */}
             <div className="flex items-start space-x-4">
               <div className="w-14 h-14 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center">
                 <Smile className="w-7 h-7 text-green-500" />
@@ -88,7 +86,6 @@ const Index = () => {
                 <p className="text-muted-foreground">Exteriorizar tus pensamientos y emociones es una técnica probada para aliviar la carga mental.</p>
               </div>
             </div>
-            {/* Beneficio 3 */}
             <div className="flex items-start space-x-4">
               <div className="w-14 h-14 bg-purple-500/10 rounded-lg flex-shrink-0 flex items-center justify-center">
                 <TrendingUp className="w-7 h-7 text-purple-500" />
@@ -98,7 +95,6 @@ const Index = () => {
                 <p className="text-muted-foreground">Al ser consciente de tus acciones, es más fácil reforzar las que te hacen bien y cambiar las que no.</p>
               </div>
             </div>
-            {/* Beneficio 4 */}
             <div className="flex items-start space-x-4">
               <div className="w-14 h-14 bg-yellow-500/10 rounded-lg flex-shrink-0 flex items-center justify-center">
                 <Zap className="w-7 h-7 text-yellow-500" />

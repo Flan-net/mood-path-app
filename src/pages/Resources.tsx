@@ -52,7 +52,6 @@ const Resources = () => {
           </p>
         </div>
 
-        {/* Category Filters */}
         <div className="flex flex-wrap gap-3 justify-center">
           <Button
             variant={selectedCategory === null ? "default" : "outline"}
@@ -77,7 +76,6 @@ const Resources = () => {
           })}
         </div>
 
-        {/* Resources Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredResources.map(resource => {
             const Icon = categoryIcons[resource.category as keyof typeof categoryIcons];
@@ -118,24 +116,6 @@ const Resources = () => {
             );
           })}
         </div>
-
-        {/* Emergency Notice */}
-        <Card className="p-8 bg-destructive/5 border-destructive/20 shadow-soft">
-          <div className="flex items-start gap-4">
-            <AlertCircle className="w-8 h-8 text-destructive flex-shrink-0 mt-1" />
-            <div className="space-y-2">
-              <h3 className="text-xl font-semibold text-destructive">Ayuda Inmediata</h3>
-              <p className="text-muted-foreground">
-                Si estás experimentando una crisis emocional o pensamientos de autolesión, 
-                por favor busca ayuda profesional inmediatamente. Puedes llamar a la línea 
-                de atención en crisis <strong>*4141</strong> disponible 24/7.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Recuerda: pedir ayuda es un acto de valentía, no de debilidad.
-              </p>
-            </div>
-          </div>
-        </Card>
       </div>
     </Layout>
   );
